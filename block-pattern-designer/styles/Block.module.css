@@ -1,0 +1,16 @@
+.block {
+  width: 50px;
+  height: 50px;
+  /* background-image: url('/images/roads/asphalt-concrete/middle-line.png');
+  background-size: cover; */
+}
+
+.borderless-button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+
+  width: 50px;
+  height: 50px;
+}

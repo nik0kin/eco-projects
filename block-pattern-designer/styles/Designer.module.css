@@ -1,0 +1,87 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 0 0 1rem;
+  line-height: 1.15;
+  font-size: 3.6rem;
+}
+
+.title {
+  text-align: center;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.description {
+  line-height: 1.5;
+  font-size: 1.5rem;
+}
+
+.design-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  width: 400px;
+  height: 400px;
+
+  background-color: lightblue;
+  margin: 4rem;
+}
+
+.design-grid-inner {
+  display: grid;
+  grid-template-columns: repeat(5, max-content);
+  /* grid-template-rows: 50px 0 50px; */
+  grid-gap: 0;
+}
+
+.grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  max-width: 800px;
+  margin-top: 3rem;
+}
+
+.block {
+  width: 50px;
+  height: 50px;
+  background-image: url('/images/roads/asphalt-concrete/middle-line.png');
+  background-size: cover;
+}
+
+.palette-block {
+  margin: 1px;
+  width: 54px;
+  height: 54px;
+}
+
+.palette-block.unselected {
+  padding: 1px;
+  border: 1px solid blue;
+}
+
+.palette-block.selected {
+  border: 2px solid orange;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
