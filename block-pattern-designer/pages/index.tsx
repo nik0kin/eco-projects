@@ -36,7 +36,7 @@ const Designer = () => {
         <h1 className={styles.title}>Block Pattern Designer</h1>
 
         <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
+          Get started by clicking a block in the palette, then clicking in the grid area
         </p>
 
         <div>
@@ -57,6 +57,12 @@ const Designer = () => {
               <Block
                 key={coordStr}
                 style={designerGrid[coordStr] || 'blank'}
+                neighbors={{
+                  north: designerGrid[getCoordStrNeighbor(x, y, 0, -1)],
+                  south: designerGrid[getCoordStrNeighbor(x, y, 0, 1)],
+                  west: designerGrid[getCoordStrNeighbor(x, y, -1, 0)],
+                  east: designerGrid[getCoordStrNeighbor(x, y, 1, 0)],
+                }}
                 onClick={() => {
                   console.log(`clicked on ${coordStr}`);
                   const updatedGrid = { ...designerGrid, [coordStr]: selection } as DesignerGrid;
@@ -126,3 +132,7 @@ export const DesignerApp = () => {
 };
 
 export default DesignerApp;
+
+const getCoordStrNeighbor = (x: number, y: number, xOffset: number, yOffset: number) => {
+  return `${x + xOffset},${y + yOffset}`;
+};

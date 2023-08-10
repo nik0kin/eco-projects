@@ -1,5 +1,6 @@
 interface BlockStyleConfig {
   rotatable?: boolean;
+  dynamic?: boolean;
 }
 
 export type AsphaltBlockStyles =
@@ -14,8 +15,12 @@ export type AsphaltBlockStyles =
 export const asphaltBlockStyleConfigs: Record<AsphaltBlockStyles, BlockStyleConfig> = {
   blank: {},
   blankWhite: {},
-  middleLine: {},
-  dottedLine: {},
+  middleLine: {
+    dynamic: true,
+  },
+  dottedLine: {
+    dynamic: true,
+  },
   border: {},
   borderCorner: {
     rotatable: true,

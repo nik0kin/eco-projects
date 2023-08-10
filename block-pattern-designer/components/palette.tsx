@@ -19,7 +19,12 @@ export const Palette: FC = () => {
             styles[selection === style ? 'selected' : 'unselected']
           }`}
         >
-          <Block type="ASPHALT-CONCRETE" style={style} onClick={() => setSelection(style)} />
+          <Block
+            type="ASPHALT-CONCRETE"
+            style={style}
+            onClick={() => setSelection(style)}
+            neighbors={{ north: style }}
+          />
         </div>
       ))}
 
