@@ -1,3 +1,5 @@
+// From Lodash
+
 /** Used as references for various `Number` constants. */
 const MAX_SAFE_INTEGER = 9007199254740991;
 

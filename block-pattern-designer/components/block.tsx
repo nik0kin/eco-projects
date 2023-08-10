@@ -8,9 +8,9 @@ const asphaltConcreteImages: Record<AsphaltBlockStyles, string> = {
   blankWhite: 'blank-white',
   middleLine: 'middle-line',
   dottedLine: 'middle-line-dotted',
-  border: 'fart',
-  borderCorner: 'fart',
-  borderLine: 'fart'
+  border: 'border',
+  borderCorner: 'border-corner',
+  borderLine: 'border-line',
 };
 
 const getBlockImage = (style: AsphaltBlockStyles) => {
@@ -20,7 +20,7 @@ const getBlockImage = (style: AsphaltBlockStyles) => {
 };
 
 // Visual only
-export const Block: FC<{ type: string; style: AsphaltBlockStyles; onClick: () => void }> = ({
+export const Block: FC<{ style: AsphaltBlockStyles; onClick: () => void }> = ({
   onClick,
   style,
 }) => {

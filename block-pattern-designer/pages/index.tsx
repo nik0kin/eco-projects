@@ -2,14 +2,18 @@ import Head from 'next/head';
 import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import styles from '../styles/Designer.module.css';
-// import { AsphaltBlockStyles } from '../lib/eco-data/blocks';
+import { AsphaltBlockStyles } from '../lib/eco-data/blocks';
 import times from '../lib/times';
 import { SelectionManager, useSelection } from '../components/selection-manager';
-import { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
-// type designerGrid = Record<string, AsphaltBlockStyles>;
+type DesignerGrid = Record<string, AsphaltBlockStyles>;
 
-const mapBlocks = (width, height, callback) => {
+const mapBlocks = (
+  width: number,
+  height: number,
+  callback: (x: number, y: number, coordStr: string) => ReactNode,
+) => {
   return times(width * height, (n) => n).map((n) => {
     const x = n % 5;
     const y = Math.floor(n / 5);
@@ -18,8 +22,7 @@ const mapBlocks = (width, height, callback) => {
 };
 
 const Designer = () => {
-  // console.log(styles); // design-grid
-  const [designerGrid, setDesignerGrid] = useState({});
+  const [designerGrid, setDesignerGrid] = useState<DesignerGrid>({});
   const selection = useSelection();
 
   return (
@@ -56,7 +59,7 @@ const Designer = () => {
                 style={designerGrid[coordStr] || 'blank'}
                 onClick={() => {
                   console.log(`clicked on ${coordStr}`);
-                  const updatedGrid = { ...designerGrid, [coordStr]: selection };
+                  const updatedGrid = { ...designerGrid, [coordStr]: selection } as DesignerGrid;
                   setDesignerGrid(updatedGrid);
                 }}
               />
