@@ -33,3 +33,7 @@ export const asphaltBlockStyleConfigs: Record<AsphaltBlockStyles, BlockStyleConf
 export const asphaltBlockStylePaletteOrder = Object.keys(
   asphaltBlockStyleConfigs,
 ) as AsphaltBlockStyles[];
+
+export const isDynamicStyle = (style: AsphaltBlockStyles) => {
+  return !!asphaltBlockStyleConfigs[style].dynamic;
+};

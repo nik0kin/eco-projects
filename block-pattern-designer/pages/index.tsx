@@ -2,12 +2,12 @@ import Head from 'next/head';
 import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import styles from '../styles/Designer.module.css';
-import { AsphaltBlockStyles } from '../lib/eco-data/blocks';
+import { AsphaltBlockStyles, isDynamicStyle } from '../lib/eco-data/blocks';
 import times from '../lib/times';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import React, { ReactNode, useState } from 'react';
 
-type DesignerGrid = Record<string, AsphaltBlockStyles>;
+type DesignerGrid = Record<string, [AsphaltBlockStyles, number]>;
 
 const mapBlocks = (
   width: number,
@@ -56,16 +56,27 @@ const Designer = () => {
             {mapBlocks(5, 5, (x, y, coordStr) => (
               <Block
                 key={coordStr}
-                style={designerGrid[coordStr] || 'blank'}
+                style={designerGrid[coordStr]?.[0] || 'blank'}
+                rotation={designerGrid[coordStr]?.[1]}
                 neighbors={{
-                  north: designerGrid[getCoordStrNeighbor(x, y, 0, -1)],
-                  south: designerGrid[getCoordStrNeighbor(x, y, 0, 1)],
-                  west: designerGrid[getCoordStrNeighbor(x, y, -1, 0)],
-                  east: designerGrid[getCoordStrNeighbor(x, y, 1, 0)],
+                  north: designerGrid[getCoordStrNeighbor(x, y, 0, -1)]?.[0],
+                  south: designerGrid[getCoordStrNeighbor(x, y, 0, 1)]?.[0],
+                  west: designerGrid[getCoordStrNeighbor(x, y, -1, 0)]?.[0],
+                  east: designerGrid[getCoordStrNeighbor(x, y, 1, 0)]?.[0],
                 }}
                 onClick={() => {
-                  console.log(`clicked on ${coordStr}`);
-                  const updatedGrid = { ...designerGrid, [coordStr]: selection } as DesignerGrid;
+                  // console.log(`clicked on ${coordStr}`);
+                  const newGridCell: [AsphaltBlockStyles, number] = [selection, 0];
+                  const updatedGrid = { ...designerGrid, [coordStr]: newGridCell };
+                  setDesignerGrid(updatedGrid);
+                }}
+                onRightClick={() => {
+                  const previousGridCell = designerGrid[coordStr];
+                  if (isDynamicStyle(previousGridCell?.[0] || 'blank')) return;
+
+                  const updatedGridCell: [AsphaltBlockStyles, number] = [previousGridCell?.[0] || 'blank', ((previousGridCell?.[1] || 0) + 90) % 360];
+                  const updatedGrid = { ...designerGrid, [coordStr]: updatedGridCell };
+                  // console.log(updatedGridCell);
                   setDesignerGrid(updatedGrid);
                 }}
               />

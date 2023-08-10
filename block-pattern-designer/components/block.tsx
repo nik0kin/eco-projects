@@ -106,13 +106,18 @@ const getBlockSubstyle = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) 
 export const Block: FC<{
   type?: string;
   style: AsphaltBlockStyles;
+  rotation?: number;
   neighbors?: NeighborBlocks;
   onClick: () => void;
-}> = ({ onClick, neighbors, style }) => {
-  const { src, rotation } = getBlockImage(style, neighbors || {});
+  onRightClick?: () => void;
+}> = ({ onClick, onRightClick, neighbors, style, rotation }) => {
+  const { src, rotation: dynamicRotation } = getBlockImage(style, neighbors || {});
   return (
-    <button className={styles['borderless-button']} onClick={onClick}>
-      <img className={styles.block} src={src} style={{ transform: `rotate(${rotation}deg)` }} />
+    <button className={styles['borderless-button']} onClick={onClick} onContextMenu={onRightClick && ((event) => {
+      event.preventDefault();
+      onRightClick();
+    })}>
+      <img className={styles.block} src={src} style={{ transform: `rotate(${rotation || dynamicRotation || 0}deg)` }} />
     </button>
   );
 };
