@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# tsc
+tsconfig.tsbuildinfo
+
 # next.js
 /.next/
 /out/

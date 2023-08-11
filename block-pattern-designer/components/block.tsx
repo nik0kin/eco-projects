@@ -113,11 +113,22 @@ export const Block: FC<{
 }> = ({ onClick, onRightClick, neighbors, style, rotation }) => {
   const { src, rotation: dynamicRotation } = getBlockImage(style, neighbors || {});
   return (
-    <button className={styles['borderless-button']} onClick={onClick} onContextMenu={onRightClick && ((event) => {
-      event.preventDefault();
-      onRightClick();
-    })}>
-      <img className={styles.block} src={src} style={{ transform: `rotate(${rotation || dynamicRotation || 0}deg)` }} />
+    <button
+      className={styles['borderless-button']}
+      onClick={onClick}
+      onContextMenu={
+        onRightClick &&
+        ((event) => {
+          event.preventDefault();
+          onRightClick();
+        })
+      }
+    >
+      <img
+        className={styles.block}
+        src={src}
+        style={{ transform: `rotate(${rotation || dynamicRotation || 0}deg)` }}
+      />
     </button>
   );
 };

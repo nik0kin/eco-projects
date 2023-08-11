@@ -21,7 +21,7 @@ const mapBlocks = (
   });
 };
 
-const Designer: FC<{urlData: DesignerGrid}> = ({ urlData }) => {
+const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
   const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(urlData);
   const selection = useSelection();
 
@@ -77,7 +77,10 @@ const Designer: FC<{urlData: DesignerGrid}> = ({ urlData }) => {
                   const previousGridCell = designerGrid[coordStr];
                   if (isDynamicStyle(previousGridCell?.[0] || 'blank')) return;
 
-                  const updatedGridCell: [AsphaltBlockStyles, number] = [previousGridCell?.[0] || 'blank', ((previousGridCell?.[1] || 0) + 90) % 360];
+                  const updatedGridCell: [AsphaltBlockStyles, number] = [
+                    previousGridCell?.[0] || 'blank',
+                    ((previousGridCell?.[1] || 0) + 90) % 360,
+                  ];
                   const updatedGrid = { ...designerGrid, [coordStr]: updatedGridCell };
                   // console.log(updatedGridCell);
                   setDesignerGrid(updatedGrid);

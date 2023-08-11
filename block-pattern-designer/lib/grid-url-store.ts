@@ -1,5 +1,8 @@
 import { DesignerGrid } from './grid-type';
-import { useUrlData as useUrlDataGeneric, updateUrlData as updateUrlDataGeneric } from './url-store';
+import {
+  useUrlData as useUrlDataGeneric,
+  updateUrlData as updateUrlDataGeneric,
+} from './url-store';
 
 export const useUrlData = () => {
   const [isLoaded, urlData] = useUrlDataGeneric<DesignerGrid>();
