@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import times from 'lodash/times';
 import Head from 'next/head';
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, Fragment, ReactNode, useState } from 'react';
 import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
@@ -10,6 +10,7 @@ import { AsphaltBlockStyles, isDynamicStyle } from '../lib/eco-data/blocks';
 import { DesignerGrid } from '../lib/grid-type';
 import { useUrlData, updateUrlData } from '../lib/grid-url-store';
 
+const PAGE_TITLE = 'Road Pattern Designer';
 const DEFAULT_STYLE = 'blank';
 
 const mapBlocks = (
@@ -41,13 +42,8 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Block Pattern Designer</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main>
-        <h1 className={styles.title}>Block Pattern Designer</h1>
+        <h1 className={styles.title}>{PAGE_TITLE}</h1>
 
         <p className={styles.description}>
           Get started by clicking a block in the palette, then clicking in the grid area
@@ -163,17 +159,32 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
   );
 };
 
+const DesignerHead: FC = () => (
+  <Head>
+    <title>{PAGE_TITLE}</title>
+    <link rel="icon" href="/favicon.ico" />
+  </Head>
+);
+
 export const DesignerApp = () => {
   const [isLoaded, urlData] = useUrlData();
 
   if (!isLoaded) {
-    return <h1> Loading </h1>;
+    return (
+      <Fragment>
+        <DesignerHead />
+        <h1> Loading </h1>
+      </Fragment>
+    );
   }
 
   return (
-    <SelectionManager>
-      <Designer urlData={urlData} />
-    </SelectionManager>
+    <Fragment>
+      <DesignerHead />
+      <SelectionManager>
+        <Designer urlData={urlData} />
+      </SelectionManager>
+    </Fragment>
   );
 };
 

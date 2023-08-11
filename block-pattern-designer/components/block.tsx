@@ -26,7 +26,16 @@ const getBlockImage = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) => 
 
   if (asphaltBlockStyleConfigs[style]?.dynamic) {
     let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
-    imageName = asphaltConcreteImages[style] + substyle;
+    // dotted line uses same sprites as middle line except for straight line
+    if (style === 'dottedLine') {
+      imageName =
+        substyle === ''
+          ? asphaltConcreteImages[style]
+          : asphaltConcreteImages['middleLine'] + substyle;
+    } else {
+      // ie middleLine branch
+      imageName = asphaltConcreteImages[style] + substyle;
+    }
     rotation = rot;
   } else {
     imageName = asphaltConcreteImages[style];

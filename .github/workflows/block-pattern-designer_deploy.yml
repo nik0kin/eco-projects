@@ -1,13 +1,13 @@
 name: Build and deploy to server
 
 # Requires
-#   - Server with pm2
-#   - this repo setup at /srv/eco-projects
+#   - Server with pm2/nvm
+#   -   and repo setup at /srv/eco-projects with ssh-worker user access
 
 on:
   push:
-#     branches:
-#       - main
+    branches:
+      - main
 
 jobs:
   validate-build:
