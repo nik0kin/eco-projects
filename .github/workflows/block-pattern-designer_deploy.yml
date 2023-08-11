@@ -6,8 +6,8 @@ name: Build and deploy to server
 
 on:
   push:
-    branches:
-      - main
+#     branches:
+#       - main
 
 jobs:
   validate-build:
@@ -35,8 +35,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Setup nvm
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Go to directory and pull
             cd /srv/eco-projects/block-pattern-designer
             git pull
+
+            # Build and Restart
             npm install && npm run build
-            pm2 stop pm2.config.json || echo 'pm2 process not running'
-            pm2 start pm2.config.json
+            pm2 stop pm2.config.json --silent
+            pm2 start pm2.config.json --silent && echo "PM2 process started" || echo "PM2 process failed to start"
+
