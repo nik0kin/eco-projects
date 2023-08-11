@@ -3,11 +3,11 @@ import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import styles from '../styles/Designer.module.css';
 import { AsphaltBlockStyles, isDynamicStyle } from '../lib/eco-data/blocks';
+import { DesignerGrid } from '../lib/grid-type';
+import { useUrlData, updateUrlData } from '../lib/grid-url-store';
 import times from '../lib/times';
 import { SelectionManager, useSelection } from '../components/selection-manager';
-import React, { ReactNode, useState } from 'react';
-
-type DesignerGrid = Record<string, [AsphaltBlockStyles, number]>;
+import React, { FC, ReactNode, useState } from 'react';
 
 const mapBlocks = (
   width: number,
@@ -21,9 +21,11 @@ const mapBlocks = (
   });
 };
 
-const Designer = () => {
-  const [designerGrid, setDesignerGrid] = useState<DesignerGrid>({});
+const Designer: FC<{urlData: DesignerGrid}> = ({ urlData }) => {
+  const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(urlData);
   const selection = useSelection();
+
+  const saveData = () => updateUrlData(designerGrid);
 
   return (
     <div className={styles.container}>
@@ -69,6 +71,7 @@ const Designer = () => {
                   const newGridCell: [AsphaltBlockStyles, number] = [selection, 0];
                   const updatedGrid = { ...designerGrid, [coordStr]: newGridCell };
                   setDesignerGrid(updatedGrid);
+                  saveData();
                 }}
                 onRightClick={() => {
                   const previousGridCell = designerGrid[coordStr];
@@ -78,6 +81,7 @@ const Designer = () => {
                   const updatedGrid = { ...designerGrid, [coordStr]: updatedGridCell };
                   // console.log(updatedGridCell);
                   setDesignerGrid(updatedGrid);
+                  saveData();
                 }}
               />
             ))}
@@ -135,9 +139,15 @@ const Designer = () => {
 };
 
 export const DesignerApp = () => {
+  const [isLoaded, urlData] = useUrlData();
+
+  if (!isLoaded) {
+    return <h1> Loading </h1>;
+  }
+
   return (
     <SelectionManager>
-      <Designer />
+      <Designer urlData={urlData} />
     </SelectionManager>
   );
 };
