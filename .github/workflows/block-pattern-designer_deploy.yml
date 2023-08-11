@@ -1,0 +1,40 @@
+name: Build and deploy to server
+
+# Requires
+#   - Server with pm2
+#   - this repo setup at /srv/eco-projects
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-build:
+    runs-on: ubuntu-latest
+    working-directory: block-pattern-designer
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate-build
+    steps:
+      - name: Deploy by SSH-ing, pulling latest, and cycling the node/next process
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /srv/eco-projects/block-pattern-designer
+            git pull
+            npm install && npm run build
+            pm2 stop || echo 'pm2 process not running'
+            pm2 start pm2.config.json

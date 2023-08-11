@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "eco-block-pattern-designer",
+      "script": "PORT=3050 npm run start",
+      "instances": 1,
+      "exec_mode": "fork"
+    }
+  ]
+}

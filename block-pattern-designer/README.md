@@ -4,6 +4,16 @@
 
 `npm run dev`
 
+## Run on a server
+
+```
+# clone repo, then
+
+npm install && npm run build
+
+pm2 start pm2.config.json
+```
+
 ## Linting
 
 Runs precommit via husky
