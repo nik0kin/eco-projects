@@ -1,39 +1,39 @@
 import { FC } from 'react';
 import React from 'react';
 import styles from '../styles/Block.module.css';
-import { AsphaltBlockStyles, asphaltBlockStyleConfigs } from '../lib/eco-data/blocks';
+import { AsphaltConcreteStyle, BlockType, asphaltBlockStyleConfigs } from '../lib/eco-data/blocks';
 
 interface NeighborBlocks {
-  north?: AsphaltBlockStyles;
-  south?: AsphaltBlockStyles;
-  west?: AsphaltBlockStyles;
-  east?: AsphaltBlockStyles;
+  north?: AsphaltConcreteStyle;
+  south?: AsphaltConcreteStyle;
+  west?: AsphaltConcreteStyle;
+  east?: AsphaltConcreteStyle;
 }
 
-const asphaltConcreteImages: Record<AsphaltBlockStyles, string> = {
-  blank: 'blank-asphalt',
-  blankWhite: 'blank-white',
-  middleLine: 'middle-line',
-  dottedLine: 'middle-line-dotted',
-  border: 'border',
-  borderCorner: 'border-corner',
-  borderLine: 'border-line',
+const asphaltConcreteImages: Record<AsphaltConcreteStyle, string> = {
+  [AsphaltConcreteStyle.Blank]: 'blank-asphalt',
+  [AsphaltConcreteStyle.BlankWhite]: 'blank-white',
+  [AsphaltConcreteStyle.MiddleLine]: 'middle-line',
+  [AsphaltConcreteStyle.DottedLine]: 'middle-line-dotted',
+  [AsphaltConcreteStyle.Border]: 'border',
+  [AsphaltConcreteStyle.BorderCorner]: 'border-corner',
+  [AsphaltConcreteStyle.BorderSide]: 'border-line',
 };
 
-const getBlockImage = (type: string, style: AsphaltBlockStyles, neighbors: NeighborBlocks) => {
+const getBlockImage = (type: BlockType, style: AsphaltConcreteStyle, neighbors: NeighborBlocks) => {
   let imageName: string = '';
   let src: string = '';
   let rotation: number = 0;
 
-  if (type === 'ASPHALT-CONCRETE') {
+  if (type === BlockType.AsphaltConcrete) {
     if (asphaltBlockStyleConfigs[style]?.dynamic) {
       let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
       // dotted line uses same sprites as middle line except for straight line
-      if (style === 'dottedLine') {
+      if (style === AsphaltConcreteStyle.DottedLine) {
         imageName =
           substyle === ''
             ? asphaltConcreteImages[style]
-            : asphaltConcreteImages['middleLine'] + substyle;
+            : asphaltConcreteImages[AsphaltConcreteStyle.MiddleLine] + substyle;
       } else {
         // ie middleLine branch
         imageName = asphaltConcreteImages[style] + substyle;
@@ -45,10 +45,10 @@ const getBlockImage = (type: string, style: AsphaltBlockStyles, neighbors: Neigh
     src = `/images/roads/asphalt-concrete/${imageName}.png`;
   } else {
     switch (type) {
-      case 'GRASS':
+      case BlockType.Grass:
         src = `/images/grass.png`;
         break;
-      case 'STONE-ROAD':
+      case BlockType.StoneRoad:
         src = `/images/roads/stone-road/stone-road-solo.png`;
         break;
     }
@@ -59,7 +59,7 @@ const getBlockImage = (type: string, style: AsphaltBlockStyles, neighbors: Neigh
 };
 
 // TODO make this code simpler or easier to understand
-const getBlockSubstyle = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) => {
+const getBlockSubstyle = (style: AsphaltConcreteStyle, neighbors: NeighborBlocks) => {
   let substyle: string = '';
   let rotation: number = 0;
   const neighborsMatch = {
@@ -126,8 +126,8 @@ const getBlockSubstyle = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) 
 
 // Visual only
 export const Block: FC<{
-  type?: string;
-  style?: AsphaltBlockStyles;
+  type?: BlockType;
+  style?: AsphaltConcreteStyle;
   rotation?: number;
   neighbors?: NeighborBlocks;
   onClick: () => void;

@@ -2,7 +2,11 @@ import { FC, ReactNode } from 'react';
 import React from 'react';
 import styles from '../styles/Designer.module.css';
 import { Block } from './block';
-import { asphaltBlockStylePaletteOrder } from '../lib/eco-data/blocks';
+import {
+  AsphaltConcreteStyle,
+  BlockType,
+  asphaltBlockStylePaletteOrder,
+} from '../lib/eco-data/blocks';
 import { useSelection } from './selection-manager';
 
 export const Palette: FC = () => {
@@ -14,18 +18,18 @@ export const Palette: FC = () => {
         <big style={{ margin: '1rem' }}>Palette</big>
       </p>
 
-      <BlockSelectionBorder type="GRASS">
-        <Block type="GRASS" onClick={() => setSelection(['GRASS'])} />
+      <BlockSelectionBorder type={BlockType.Grass}>
+        <Block type={BlockType.Grass} onClick={() => setSelection([BlockType.Grass])} />
       </BlockSelectionBorder>
-      <BlockSelectionBorder type="STONE-ROAD">
-        <Block type="STONE-ROAD" onClick={() => setSelection(['STONE-ROAD'])} />
+      <BlockSelectionBorder type={BlockType.StoneRoad}>
+        <Block type={BlockType.StoneRoad} onClick={() => setSelection([BlockType.StoneRoad])} />
       </BlockSelectionBorder>
       {asphaltBlockStylePaletteOrder.map((style) => (
-        <BlockSelectionBorder key={style} type="ASPHALT-CONCRETE" style={style}>
+        <BlockSelectionBorder key={style} type={BlockType.AsphaltConcrete} style={style}>
           <Block
-            type="ASPHALT-CONCRETE"
+            type={BlockType.AsphaltConcrete}
             style={style}
-            onClick={() => setSelection(['ASPHALT-CONCRETE', style])}
+            onClick={() => setSelection([BlockType.AsphaltConcrete, style])}
             neighbors={{ north: style }}
           />
         </BlockSelectionBorder>
@@ -34,11 +38,11 @@ export const Palette: FC = () => {
   );
 };
 
-const BlockSelectionBorder: FC<{ children: ReactNode; type: string; style?: string }> = ({
-  children,
-  type,
-  style,
-}) => {
+const BlockSelectionBorder: FC<{
+  children: ReactNode;
+  type: BlockType;
+  style?: AsphaltConcreteStyle;
+}> = ({ children, type, style }) => {
   const { type: selectedType, style: selectedStyle } = useSelection();
   return (
     <div
