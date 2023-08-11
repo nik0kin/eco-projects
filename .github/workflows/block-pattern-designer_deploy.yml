@@ -36,5 +36,5 @@ jobs:
             cd /srv/eco-projects/block-pattern-designer
             git pull
             npm install && npm run build
-            pm2 stop || echo 'pm2 process not running'
+            pm2 stop pm2.config.json || echo 'pm2 process not running'
             pm2 start pm2.config.json
