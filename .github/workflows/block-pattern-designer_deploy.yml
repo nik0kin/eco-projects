@@ -12,7 +12,9 @@ on:
 jobs:
   validate-build:
     runs-on: ubuntu-latest
-    working-directory: block-pattern-designer
+    defaults:
+      run:
+        working-directory: block-pattern-designer
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
