@@ -6,11 +6,12 @@ import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
-import { AsphaltBlockStyles, isDynamicStyle } from '../lib/eco-data/blocks';
-import { DesignerGrid } from '../lib/grid-type';
+import { isDynamicStyle } from '../lib/eco-data/blocks';
+import { DesignerGrid, GridCell } from '../lib/grid-type';
 import { useUrlData, updateUrlData } from '../lib/grid-url-store';
 
 const PAGE_TITLE = 'Road Pattern Designer';
+const DEFAULT_TYPE = 'ASPHALT-CONCRETE';
 const DEFAULT_STYLE = 'blank';
 
 const mapBlocks = (
@@ -33,7 +34,7 @@ const debounceSaveUrlData = debounce(saveUrlData, 1000);
 
 const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
   const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(urlData);
-  const selection = useSelection();
+  const { type: selectedType, style: selectedStyle } = useSelection();
 
   const saveGridData = (grid: DesignerGrid) => {
     setDesignerGrid(grid);
@@ -70,6 +71,7 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
             {mapBlocks(5, 5, (x, y, coordStr) => (
               <Block
                 key={coordStr}
+                type={designerGrid[coordStr]?.[2] || DEFAULT_TYPE}
                 style={designerGrid[coordStr]?.[0] || DEFAULT_STYLE}
                 rotation={designerGrid[coordStr]?.[1]}
                 neighbors={{
@@ -80,7 +82,7 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
                 }}
                 onClick={() => {
                   // console.log(`clicked on ${coordStr}`);
-                  const newGridCell: [AsphaltBlockStyles, number] = [selection, 0];
+                  const newGridCell: GridCell = [selectedStyle, 0, selectedType];
                   const updatedGrid = { ...designerGrid, [coordStr]: newGridCell };
                   saveGridData(updatedGrid);
                 }}
@@ -88,9 +90,10 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
                   const previousGridCell = designerGrid[coordStr];
                   if (isDynamicStyle(previousGridCell?.[0] || DEFAULT_STYLE)) return;
 
-                  const updatedGridCell: [AsphaltBlockStyles, number] = [
+                  const updatedGridCell: GridCell = [
                     previousGridCell?.[0] || DEFAULT_STYLE,
                     ((previousGridCell?.[1] || 0) + 90) % 360,
+                    previousGridCell?.[2] || DEFAULT_TYPE,
                   ];
                   const updatedGrid = { ...designerGrid, [coordStr]: updatedGridCell };
                   // console.log(updatedGridCell);

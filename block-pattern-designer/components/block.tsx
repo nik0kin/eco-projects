@@ -20,29 +20,42 @@ const asphaltConcreteImages: Record<AsphaltBlockStyles, string> = {
   borderLine: 'border-line',
 };
 
-const getBlockImage = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) => {
+const getBlockImage = (type: string, style: AsphaltBlockStyles, neighbors: NeighborBlocks) => {
   let imageName: string = '';
+  let src: string = '';
   let rotation: number = 0;
 
-  if (asphaltBlockStyleConfigs[style]?.dynamic) {
-    let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
-    // dotted line uses same sprites as middle line except for straight line
-    if (style === 'dottedLine') {
-      imageName =
-        substyle === ''
-          ? asphaltConcreteImages[style]
-          : asphaltConcreteImages['middleLine'] + substyle;
+  if (type === 'ASPHALT-CONCRETE') {
+    if (asphaltBlockStyleConfigs[style]?.dynamic) {
+      let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
+      // dotted line uses same sprites as middle line except for straight line
+      if (style === 'dottedLine') {
+        imageName =
+          substyle === ''
+            ? asphaltConcreteImages[style]
+            : asphaltConcreteImages['middleLine'] + substyle;
+      } else {
+        // ie middleLine branch
+        imageName = asphaltConcreteImages[style] + substyle;
+      }
+      rotation = rot;
     } else {
-      // ie middleLine branch
-      imageName = asphaltConcreteImages[style] + substyle;
+      imageName = asphaltConcreteImages[style];
     }
-    rotation = rot;
+    src = `/images/roads/asphalt-concrete/${imageName}.png`;
   } else {
-    imageName = asphaltConcreteImages[style];
+    switch (type) {
+      case 'GRASS':
+        src = `/images/grass.png`;
+        break;
+      case 'STONE-ROAD':
+        src = `/images/roads/stone-road/stone-road-solo.png`;
+        break;
+    }
   }
 
-  if (!imageName) throw new Error('Missing style image ' + style);
-  return { src: `/images/roads/asphalt-concrete/${imageName}.png`, rotation };
+  if (!src) throw new Error(`Missing image for type=${type} style=${style}`);
+  return { src, rotation };
 };
 
 // TODO make this code simpler or easier to understand
@@ -114,13 +127,13 @@ const getBlockSubstyle = (style: AsphaltBlockStyles, neighbors: NeighborBlocks) 
 // Visual only
 export const Block: FC<{
   type?: string;
-  style: AsphaltBlockStyles;
+  style?: AsphaltBlockStyles;
   rotation?: number;
   neighbors?: NeighborBlocks;
   onClick: () => void;
   onRightClick?: () => void;
-}> = ({ onClick, onRightClick, neighbors, style, rotation }) => {
-  const { src, rotation: dynamicRotation } = getBlockImage(style, neighbors || {});
+}> = ({ onClick, onRightClick, neighbors, type, style, rotation }) => {
+  const { src, rotation: dynamicRotation } = getBlockImage(type, style, neighbors || {});
   return (
     <button
       className={styles['borderless-button']}

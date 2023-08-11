@@ -1,44 +1,52 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import React from 'react';
 import styles from '../styles/Designer.module.css';
 import { Block } from './block';
 import { asphaltBlockStylePaletteOrder } from '../lib/eco-data/blocks';
-import { useSelection, useSetSelection } from './selection-manager';
+import { useSelection } from './selection-manager';
 
 export const Palette: FC = () => {
-  const selection = useSelection();
-  const setSelection = useSetSelection();
+  const { setSelection } = useSelection();
   return (
-    <div className={styles.grid} style={{ border: '1px solid black' }}>
-      <p>palette (right side for desktop, below for mobile)</p>
+    /* TODO right side for desktop, below for mobile */
+    <div className={styles.grid} style={{ border: '2px solid black', padding: '.25rem' }}>
+      <p>
+        <big style={{ margin: '1rem' }}>Palette</big>
+      </p>
 
+      <BlockSelectionBorder type="GRASS">
+        <Block type="GRASS" onClick={() => setSelection(['GRASS'])} />
+      </BlockSelectionBorder>
+      <BlockSelectionBorder type="STONE-ROAD">
+        <Block type="STONE-ROAD" onClick={() => setSelection(['STONE-ROAD'])} />
+      </BlockSelectionBorder>
       {asphaltBlockStylePaletteOrder.map((style) => (
-        <div
-          key={style}
-          className={`${styles['palette-block']} ${
-            styles[selection === style ? 'selected' : 'unselected']
-          }`}
-        >
+        <BlockSelectionBorder key={style} type="ASPHALT-CONCRETE" style={style}>
           <Block
             type="ASPHALT-CONCRETE"
             style={style}
-            onClick={() => setSelection(style)}
+            onClick={() => setSelection(['ASPHALT-CONCRETE', style])}
             neighbors={{ north: style }}
           />
-        </div>
+        </BlockSelectionBorder>
       ))}
-
-      {/* <div className={`${styles['palette-block']} ${styles['unselected']}`}>
-        <Block type="ASPHALT-CONCRETE" style="blank" onClick={() => 0}/>
     </div>
+  );
+};
 
-    <div className={`${styles['palette-block']} ${styles['selected']}`}>
-        <Block type="ASPHALT-CONCRETE" style="blankWhite" onClick={() => 0}/>
-    </div>
-
-    <div className={`${styles['palette-block']} ${styles['unselected']}`}>
-        <Block type="ASPHALT-CONCRETE" style="middleLine" onClick={() => 0}/>
-    </div> */}
+const BlockSelectionBorder: FC<{ children: ReactNode; type: string; style?: string }> = ({
+  children,
+  type,
+  style,
+}) => {
+  const { type: selectedType, style: selectedStyle } = useSelection();
+  return (
+    <div
+      className={`${styles['palette-block']} ${
+        styles[selectedType === type && selectedStyle === style ? 'selected' : 'unselected']
+      }`}
+    >
+      {children}
     </div>
   );
 };
