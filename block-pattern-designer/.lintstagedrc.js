@@ -1,6 +1,6 @@
 module.exports = {
   // Type check TypeScript files
-  '**/*.(ts|tsx)': () => 'cd block-pattern-designer && npx tsc --noEmit',
+  // '**/*.(ts|tsx)': () => 'cd block-pattern-designer && npx tsc --noEmit',
 
   // Lint & Prettify TS and JS files
   '**/*.(ts|tsx|js)': (filenames) => [

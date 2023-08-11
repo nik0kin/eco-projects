@@ -9,6 +9,8 @@
     "prepare": "cd .. && husky install block-pattern-designer/.husky"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.197",
+    "lodash": "^4.17.21",
     "next": "latest",
     "react": "18.2.0",
     "react-dom": "18.2.0"
