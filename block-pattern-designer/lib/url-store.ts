@@ -1,3 +1,4 @@
+import LzString from 'lz-string';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -13,9 +14,16 @@ export const useUrlData = <T = unknown>(): [boolean, T] => {
     setIsLoaded(true);
   }, [asPath]);
 
-  return !memoedData ? [isLoaded, undefined] : [isLoaded, JSON.parse(atob(memoedData))];
+  return !memoedData
+    ? [isLoaded, undefined]
+    : [isLoaded, JSON.parse(LzString.decompressFromEncodedURIComponent(memoedData))];
 };
 
 export const updateUrlData = <T = unknown>(data: T) => {
-  location.hash = '#' + btoa(JSON.stringify(data));
+  console.log('Saving', data);
+  console.log('stringified=', JSON.stringify(data).length);
+  console.log('before=', btoa(JSON.stringify(data)).length);
+  const compressedData = LzString.compressToEncodedURIComponent(JSON.stringify(data));
+  console.log('after=', compressedData.length);
+  location.hash = '#' + compressedData;
 };

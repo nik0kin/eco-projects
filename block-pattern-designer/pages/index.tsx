@@ -6,13 +6,11 @@ import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
-import { AsphaltConcreteStyle, BlockType, isDynamicStyle } from '../lib/eco-data/blocks';
-import { DesignerGrid, GridCell } from '../lib/grid-type';
+import { isDynamicStyle } from '../lib/eco-data/blocks';
+import { DEFAULT_STYLE, DEFAULT_TYPE, DesignerGrid, GridCell } from '../lib/grid-types';
 import { useUrlData, updateUrlData } from '../lib/grid-url-store';
 
 const PAGE_TITLE = 'Road Pattern Designer';
-const DEFAULT_TYPE = BlockType.AsphaltConcrete;
-const DEFAULT_STYLE = AsphaltConcreteStyle.Blank;
 
 const mapBlocks = (
   width: number,
