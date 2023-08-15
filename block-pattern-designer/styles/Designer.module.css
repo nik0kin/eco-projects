@@ -5,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  --block-size: 50px; /* Overriden by React, dynamic */
 }
 
 .title {
@@ -33,16 +34,17 @@
   justify-content: center;
   flex-wrap: wrap;
 
-  width: 400px;
-  height: 400px;
+  /* width: 400px;
+  height: 400px; */
 
+  padding: 75px;
   background-color: lightblue;
   margin: 4rem;
 }
 
 .design-grid-inner {
   display: grid;
-  grid-template-columns: repeat(5, max-content);
+  /* grid-template-columns: repeat(5, max-content);  */ /* Added via React, dynamic size */
   /* grid-template-rows: 50px 0 50px; */
   grid-gap: 0;
 }
@@ -57,26 +59,22 @@
   margin-top: 3rem;
 }
 
-.block {
-  width: 50px;
-  height: 50px;
-  background-image: url('/images/roads/asphalt-concrete/middle-line.png');
-  background-size: cover;
-}
-
 .palette-block {
-  margin: 1px;
-  width: 54px;
-  height: 54px;
+  margin: 2px;
+  /* Full Size blocks*/
+  --block-size: 50px;
+  width: calc( var(--block-size) + 10px);
+  height: calc( var(--block-size) + 10px);
 }
 
 .palette-block.unselected {
-  padding: 1px;
-  border: 1px solid blue;
+  padding: 3px;
+  border: 2px solid lightgrey;
 }
 
 .palette-block.selected {
-  border: 2px solid orange;
+  padding: 2px;
+  border: 3px solid orange;
 }
 
 @media (max-width: 600px) {

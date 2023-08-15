@@ -1,13 +1,19 @@
 import debounce from 'lodash/debounce';
 import times from 'lodash/times';
 import Head from 'next/head';
-import React, { FC, Fragment, ReactNode, useState } from 'react';
+import React, { ChangeEvent, FC, Fragment, ReactNode, useState } from 'react';
 import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
 import { isDynamicStyle } from '../lib/eco-data/blocks';
-import { DEFAULT_STYLE, DEFAULT_TYPE, DesignerGrid, GridCell } from '../lib/grid-types';
+import {
+  LENGTH_OF_CLAIM,
+  DEFAULT_STYLE,
+  DEFAULT_TYPE,
+  DesignerGrid,
+  GridCell,
+} from '../lib/grid-types';
 import { useUrlData, updateUrlData } from '../lib/grid-url-store';
 
 const PAGE_TITLE = 'Road Pattern Designer';
@@ -18,29 +24,46 @@ const mapBlocks = (
   callback: (x: number, y: number, coordStr: string) => ReactNode,
 ) => {
   return times(width * height, (n) => n).map((n) => {
-    const x = n % 5;
-    const y = Math.floor(n / 5);
+    const x = n % width;
+    const y = Math.floor(n / width);
     return callback(x, y, `${x},${y}`);
   });
 };
 
-const saveUrlData = (grid: DesignerGrid) => {
+const saveUrlData = (grid: DesignerGrid, size: [number, number]) => {
   // dont block render thread to save data
-  setTimeout(() => updateUrlData(grid), 0);
+  setTimeout(() => updateUrlData(grid, size), 0);
 };
 const debounceSaveUrlData = debounce(saveUrlData, 1000);
 
-const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
-  const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(urlData);
+const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, number] }> = ({
+  preloadedGrid,
+  preloadedGridSize,
+}) => {
+  const [width, setWidth] = useState(preloadedGridSize[0]);
+  const [height, setHeight] = useState(preloadedGridSize[1]);
+  const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(preloadedGrid);
   const { type: selectedType, style: selectedStyle } = useSelection();
 
   const saveGridData = (grid: DesignerGrid) => {
     setDesignerGrid(grid);
-    debounceSaveUrlData(grid);
+    debounceSaveUrlData(grid, [width, height]);
+  };
+
+  const onClaimSizeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedSize = event.target.value.split('x');
+    const newWidth = Number(selectedSize[0]);
+    const newHeight = Number(selectedSize[1]);
+    setWidth(newWidth);
+    setHeight(newHeight);
+    debounceSaveUrlData(designerGrid, [newWidth, newHeight]);
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{ '--block-size': getBlockSize(width, height) } as any}
+    >
       <main>
         <h1 className={styles.title}>{PAGE_TITLE}</h1>
 
@@ -50,7 +73,11 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
 
         <div>
           Claim Size
-          <select name="grid-size">
+          <select
+            name="grid-size"
+            onChange={onClaimSizeChange}
+            defaultValue={`${preloadedGridSize[0]}x${preloadedGridSize[1]}`}
+          >
             <option value="1x1">1x1</option>
             <option value="1x2">1x2</option>
             <option value="1x3">1x3</option>
@@ -65,8 +92,11 @@ const Designer: FC<{ urlData: DesignerGrid }> = ({ urlData }) => {
         </div>
 
         <div className={styles['design-grid']}>
-          <div className={styles['design-grid-inner']}>
-            {mapBlocks(5, 5, (x, y, coordStr) => (
+          <div
+            className={styles['design-grid-inner']}
+            style={{ gridTemplateColumns: `repeat(${width * LENGTH_OF_CLAIM}, max-content)` }}
+          >
+            {mapBlocks(width * LENGTH_OF_CLAIM, height * LENGTH_OF_CLAIM, (x, y, coordStr) => (
               <Block
                 key={coordStr}
                 type={designerGrid[coordStr]?.[2] || DEFAULT_TYPE}
@@ -168,7 +198,7 @@ const DesignerHead: FC = () => (
 );
 
 export const DesignerApp = () => {
-  const [isLoaded, urlData] = useUrlData();
+  const [isLoaded, urlGrid, urlGridSize] = useUrlData();
 
   if (!isLoaded) {
     return (
@@ -183,7 +213,7 @@ export const DesignerApp = () => {
     <Fragment>
       <DesignerHead />
       <SelectionManager>
-        <Designer urlData={urlData} />
+        <Designer preloadedGrid={urlGrid} preloadedGridSize={urlGridSize} />
       </SelectionManager>
     </Fragment>
   );
@@ -193,4 +223,10 @@ export default DesignerApp;
 
 const getCoordStrNeighbor = (x: number, y: number, xOffset: number, yOffset: number) => {
   return `${x + xOffset},${y + yOffset}`;
+};
+
+const getBlockSize = (gridWidth: number, gridHeight: number) => {
+  if (gridWidth === 1 && gridHeight === 1) return '50px';
+  if (gridWidth === 3 || gridHeight === 3) return '32px';
+  else return '44px';
 };
