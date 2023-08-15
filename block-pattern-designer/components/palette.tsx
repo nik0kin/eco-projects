@@ -13,7 +13,10 @@ export const Palette: FC = () => {
   const { setSelection } = useSelection();
   return (
     /* TODO right side for desktop, below for mobile */
-    <div className={styles.grid} style={{ border: '2px solid black', padding: '.25rem' }}>
+    <div
+      className={styles['palette-grid']}
+      style={{ border: '2px solid black', padding: '.25rem' }}
+    >
       <p>
         <big style={{ margin: '1rem' }}>Palette</big>
       </p>

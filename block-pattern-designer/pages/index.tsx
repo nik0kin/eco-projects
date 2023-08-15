@@ -147,7 +147,7 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
 
       <style jsx>{`
         main {
-          padding: 5rem 0;
+          padding: 4rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -226,7 +226,14 @@ const getCoordStrNeighbor = (x: number, y: number, xOffset: number, yOffset: num
 };
 
 const getBlockSize = (gridWidth: number, gridHeight: number) => {
-  if (gridWidth === 1 && gridHeight === 1) return '50px';
-  if (gridWidth === 3 || gridHeight === 3) return '32px';
-  else return '44px';
+  if (window.innerWidth > 600) {
+    if (gridWidth === 1 && gridHeight === 1) return '50px';
+    if (gridWidth === 3 || gridHeight === 3) return '32px';
+    else return '44px';
+  }
+
+  // default/mobile
+  if (gridWidth === 1 && gridHeight === 1) return '40px';
+  if (gridWidth === 3 || gridHeight === 3) return '25px';
+  else return '32px';
 };

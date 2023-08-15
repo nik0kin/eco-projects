@@ -37,9 +37,9 @@
   /* width: 400px;
   height: 400px; */
 
-  padding: 75px;
+  padding: 1.5rem;
   background-color: lightblue;
-  margin: 4rem;
+  margin: 1.5rem;
 }
 
 .design-grid-inner {
@@ -49,14 +49,14 @@
   grid-gap: 0;
 }
 
-.grid {
+.palette-grid {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
 
   max-width: 800px;
-  margin-top: 3rem;
+  /* margin-top: 2rem; */
 }
 
 .palette-block {
@@ -77,9 +77,16 @@
   border: 3px solid orange;
 }
 
-@media (max-width: 600px) {
-  .grid {
+@media (min-width: 600px) {
+  .design-grid {
+    padding: 3rem;
+    margin: 3rem;
+  }
+}
+
+/* @media (max-width: 600px) {
+  .palette-grid {
     width: 100%;
     flex-direction: column;
   }
-}
+} */
