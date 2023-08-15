@@ -145,6 +145,13 @@ export const Block: FC<{
           onRightClick();
         })
       }
+      onMouseMove={(event) => {
+        if (event.buttons === 1) {
+          onClick();
+        }
+      }}
+      onTouchMove={onClick}
+      onDragStart={(event) => event.preventDefault()}
     >
       <img
         className={styles.block}
