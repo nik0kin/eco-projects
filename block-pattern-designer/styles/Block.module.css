@@ -2,8 +2,6 @@
   width: calc(var(--block-size));
   height: calc(var(--block-size));
 
-  /* Fill to prevent faint white lines in between images on mobile */
-  object-fit: fill;
 }
 
 .borderless-button {
@@ -14,4 +12,12 @@
 
   width: calc(var(--block-size));
   height: calc(var(--block-size));
+
+}
+
+@media (max-width: 599px) {
+  .borderless-button {
+    /* To prevent faint white lines in between images on mobile */
+    margin: -.5px;
+  }
 }
