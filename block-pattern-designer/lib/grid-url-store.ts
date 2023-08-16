@@ -3,9 +3,11 @@ import {
   DEFAULT_STYLE,
   DEFAULT_TYPE,
   DesignerGrid,
+  LENGTH_OF_CLAIM,
   OptimizedGrid,
 } from './grid-types';
 import { useUrlData as useUrlDataGeneric, compressUrlData } from './url-store';
+import { getNumbersFromCoordStr } from './coord-str';
 
 export const useUrlData = () => {
   // const size = [0, 0];
@@ -30,6 +32,12 @@ export const useUrlData = () => {
 export const compressGridData = (data: DesignerGrid, size: [number, number]) => {
   const slimmedData = Object.entries(data).reduce<OptimizedGrid>(
     (acc, [coordStr, gridCell]) => {
+      // dont include data outside of claim size
+      const coord = getNumbersFromCoordStr(coordStr);
+      if (coord[0] >= size[0] * LENGTH_OF_CLAIM || coord[1] >= size[1] * LENGTH_OF_CLAIM) {
+        return acc;
+      }
+
       // dont include data that uses the default
       //  assumes the default cant be rotated
       if (gridCell[0] === DEFAULT_STYLE && gridCell[2] === DEFAULT_TYPE) {
