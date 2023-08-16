@@ -63,8 +63,8 @@
   margin: 2px;
   /* Full Size blocks*/
   --block-size: 50px;
-  width: calc( var(--block-size) + 10px);
-  height: calc( var(--block-size) + 10px);
+  width: calc(var(--block-size) + 10px);
+  height: calc(var(--block-size) + 10px);
 }
 
 .palette-block.unselected {

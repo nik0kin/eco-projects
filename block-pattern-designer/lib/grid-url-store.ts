@@ -5,10 +5,7 @@ import {
   DesignerGrid,
   OptimizedGrid,
 } from './grid-types';
-import {
-  useUrlData as useUrlDataGeneric,
-  updateUrlData as updateUrlDataGeneric,
-} from './url-store';
+import { useUrlData as useUrlDataGeneric, compressUrlData } from './url-store';
 
 export const useUrlData = () => {
   // const size = [0, 0];
@@ -30,7 +27,7 @@ export const useUrlData = () => {
   return [isLoaded, explodedData, size] as const;
 };
 
-export const updateUrlData = (data: DesignerGrid, size: [number, number]) => {
+export const compressGridData = (data: DesignerGrid, size: [number, number]) => {
   const slimmedData = Object.entries(data).reduce<OptimizedGrid>(
     (acc, [coordStr, gridCell]) => {
       // dont include data that uses the default
@@ -57,9 +54,8 @@ export const updateUrlData = (data: DesignerGrid, size: [number, number]) => {
 
   // if slimmedData only contains _size property, then clean the hash
   if (Object.keys(slimmedData).length === 1) {
-    location.hash = '';
-    return;
+    return '';
   }
 
-  updateUrlDataGeneric(slimmedData);
+  return compressUrlData(slimmedData);
 };

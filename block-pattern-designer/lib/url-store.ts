@@ -19,11 +19,11 @@ export const useUrlData = <T = unknown>(): [boolean, T | undefined] => {
     : [isLoaded, JSON.parse(LzString.decompressFromEncodedURIComponent(memoedData))];
 };
 
-export const updateUrlData = <T = unknown>(data: T) => {
+export const compressUrlData = <T = unknown>(data: T) => {
   console.log('Saving', data);
   const stringifiedData = JSON.stringify(data);
   console.log('stringified=', stringifiedData.length);
   const compressedData = LzString.compressToEncodedURIComponent(stringifiedData);
   console.log('compressed=', compressedData.length);
-  location.hash = '#' + compressedData;
+  return compressedData;
 };

@@ -1,6 +1,6 @@
 .block {
-  width: calc( var(--block-size));
-  height: calc( var(--block-size));
+  width: calc(var(--block-size));
+  height: calc(var(--block-size));
   object-fit: contain;
 }
 
@@ -10,6 +10,6 @@
   border: none;
   padding: 0;
 
-  width: calc( var(--block-size));
-  height: calc( var(--block-size));
+  width: calc(var(--block-size));
+  height: calc(var(--block-size));
 }

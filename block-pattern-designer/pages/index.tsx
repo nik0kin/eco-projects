@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import times from 'lodash/times';
 import Head from 'next/head';
-import React, { ChangeEvent, FC, Fragment, ReactNode, useState } from 'react';
+import React, { ChangeEvent, FC, Fragment, ReactNode, useMemo, useState } from 'react';
 import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
@@ -14,7 +14,8 @@ import {
   DesignerGrid,
   GridCell,
 } from '../lib/grid-types';
-import { useUrlData, updateUrlData } from '../lib/grid-url-store';
+import { useUrlData } from '../lib/grid-url-store';
+import { useSaveGridViaWorker } from '../lib/use-save-grid-via-worker';
 
 const PAGE_TITLE = 'Road Pattern Designer';
 
@@ -30,12 +31,6 @@ const mapBlocks = (
   });
 };
 
-const saveUrlData = (grid: DesignerGrid, size: [number, number]) => {
-  // dont block render thread to save data
-  setTimeout(() => updateUrlData(grid, size), 0);
-};
-const debounceSaveUrlData = debounce(saveUrlData, 1000);
-
 const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, number] }> = ({
   preloadedGrid,
   preloadedGridSize,
@@ -44,6 +39,9 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
   const [height, setHeight] = useState(preloadedGridSize[1]);
   const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(preloadedGrid);
   const { type: selectedType, style: selectedStyle } = useSelection();
+
+  const saveGridViaWorker = useSaveGridViaWorker();
+  const debounceSaveUrlData = useMemo(() => debounce(saveGridViaWorker, 750), [saveGridViaWorker]);
 
   const saveGridData = (grid: DesignerGrid) => {
     setDesignerGrid(grid);
