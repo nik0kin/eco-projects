@@ -1,7 +1,9 @@
 .block {
   width: calc(var(--block-size));
   height: calc(var(--block-size));
-  object-fit: contain;
+
+  /* Fill to prevent faint white lines in between images on mobile */
+  object-fit: fill;
 }
 
 .borderless-button {
