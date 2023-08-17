@@ -1,3 +1,4 @@
+import { Link } from '@chakra-ui/react';
 import debounce from 'lodash/debounce';
 import times from 'lodash/times';
 import Head from 'next/head';
@@ -69,7 +70,8 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
         <h1 className={styles.title}>{PAGE_TITLE}</h1>
 
         <p className={styles.description}>
-          Get started by clicking a block in the palette, then clicking in the grid area
+          Get started by clicking a block in the palette, then clicking in the grid area. Right
+          click or long press to rotate
         </p>
 
         <Options
@@ -126,12 +128,14 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
 
       <footer>
         Developed by Nik0kin. Check out the source at&nbsp;
-        <a
+        <Link
           href="https://github.com/nik0kin/eco-projects/tree/main/block-pattern-designer"
           target="_blank"
+          style={{ textDecoration: 'underline' }}
+          isExternal
         >
           Github
-        </a>
+        </Link>
       </footer>
 
       <style jsx>{`
@@ -158,6 +162,10 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
         body {
           padding: 0;
           margin: 0;
+        }
+        html {
+          /* Dont refresh on scrolling down */
+          overscroll-behavior: none;
         }
         * {
           box-sizing: border-box;
