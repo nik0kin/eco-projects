@@ -20,12 +20,16 @@ const asphaltConcreteImages: Record<AsphaltConcreteStyle, string> = {
   [AsphaltConcreteStyle.BorderSide]: 'border-line',
 };
 
-const getBlockImage = (type: BlockType, style: AsphaltConcreteStyle, neighbors: NeighborBlocks) => {
+const getBlockImage = (
+  type: BlockType,
+  style: AsphaltConcreteStyle | undefined,
+  neighbors: NeighborBlocks,
+) => {
   let imageName: string = '';
   let src: string = '';
   let rotation: number = 0;
 
-  if (type === BlockType.AsphaltConcrete) {
+  if (type === BlockType.AsphaltConcrete && style) {
     if (asphaltBlockStyleConfigs[style]?.dynamic) {
       let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
       // dotted line uses same sprites as middle line except for straight line
@@ -126,7 +130,7 @@ const getBlockSubstyle = (style: AsphaltConcreteStyle, neighbors: NeighborBlocks
 
 // Visual only
 export const Block: FC<{
-  type?: BlockType;
+  type: BlockType;
   style?: AsphaltConcreteStyle;
   rotation?: number;
   neighbors?: NeighborBlocks;
@@ -156,6 +160,7 @@ export const Block: FC<{
       <img
         className={styles.block}
         src={src}
+        // TODO alt description, describe block & location (coordinate or palette)
         style={{ transform: `rotate(${rotation || dynamicRotation || 0}deg)` }}
       />
     </button>

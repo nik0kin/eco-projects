@@ -1,3 +1,5 @@
+import { AsphaltConcreteStyle } from './eco-data/blocks';
+import { getNumbersFromCoordStr } from './coord-str';
 import {
   DEFAULT_SIZE,
   DEFAULT_STYLE,
@@ -7,7 +9,6 @@ import {
   OptimizedGrid,
 } from './grid-types';
 import { useUrlData as useUrlDataGeneric, compressUrlData } from './url-store';
-import { getNumbersFromCoordStr } from './coord-str';
 
 export const useUrlData = () => {
   // const size = [0, 0];
@@ -46,7 +47,7 @@ export const compressGridData = (data: DesignerGrid, size: [number, number]) => 
         // if its the default type but not style then try to minify data
         if (!gridCell[1]) {
           // [a, 0, DEFAULT_TYPE] -> a
-          acc[coordStr] = gridCell[0];
+          acc[coordStr] = gridCell[0] as AsphaltConcreteStyle;
         } else {
           // [a, b, DEFAULT_TYPE] -> [a, b]
           acc[coordStr] = [gridCell[0], gridCell[1]];
