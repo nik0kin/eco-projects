@@ -9,9 +9,10 @@
 }
 
 .title {
-  margin: 0 0 1rem;
+  margin: 0 0 1.5rem;
   line-height: 1.15;
-  font-size: 3.6rem;
+  font-size: 2rem;
+  font-weight: bold;
 }
 
 .title {
@@ -24,8 +25,11 @@
 }
 
 .description {
+  width: 100%;
+  max-width: 100vw;
   line-height: 1.5;
-  font-size: 1.5rem;
+  font-size: 1rem;
+  margin-bottom: 2rem;
 }
 
 .design-grid {
@@ -78,6 +82,14 @@
 }
 
 @media (min-width: 600px) {
+  .title {
+    font-size: 3.6rem;
+  }
+
+  .description {
+    font-size: 1.5rem;
+  }
+
   .design-grid {
     padding: 3rem;
     margin: 3rem;

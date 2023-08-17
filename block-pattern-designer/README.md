@@ -21,3 +21,7 @@ pm2 start pm2.config.json
 Runs precommit via husky
 
 Based off https://amanhimself.dev/blog/setup-nextjs-project-with-eslint-prettier-husky-lint-staged/
+
+## Uses Chakra UI
+
+Setup based on https://chakra-ui.com/getting-started/nextjs-guide

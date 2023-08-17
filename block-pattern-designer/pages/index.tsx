@@ -3,6 +3,7 @@ import times from 'lodash/times';
 import Head from 'next/head';
 import React, { ChangeEvent, FC, Fragment, ReactNode, useMemo, useState } from 'react';
 import { Block } from '../components/block';
+import { Options } from '../components/options';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
@@ -42,7 +43,7 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
   const { type: selectedType, style: selectedStyle } = useSelection();
 
   const saveGridViaWorker = useSaveGridViaWorker();
-  const debounceSaveUrlData = useMemo(() => debounce(saveGridViaWorker, 750), [saveGridViaWorker]);
+  const debounceSaveUrlData = useMemo(() => debounce(saveGridViaWorker, 1250), [saveGridViaWorker]);
 
   const saveGridData = (grid: DesignerGrid) => {
     setDesignerGrid(grid);
@@ -70,25 +71,11 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
           Get started by clicking a block in the palette, then clicking in the grid area
         </p>
 
-        <div>
-          Claim Size
-          <select
-            name="grid-size"
-            onChange={onClaimSizeChange}
-            defaultValue={`${preloadedGridSize[0]}x${preloadedGridSize[1]}`}
-          >
-            <option value="1x1">1x1</option>
-            <option value="1x2">1x2</option>
-            <option value="1x3">1x3</option>
-            <option value="2x1">2x1</option>
-            <option value="2x2">2x2</option>
-            <option value="2x3">2x3</option>
-            <option value="3x1">3x1</option>
-            <option value="3x2">3x2</option>
-            <option value="3x3">3x3</option>
-          </select>
-          <button onClick={() => saveGridData({})}>reset</button>
-        </div>
+        <Options
+          preloadedGridSize={preloadedGridSize}
+          saveGridData={saveGridData}
+          onClaimSizeChange={onClaimSizeChange}
+        />
 
         <div className={styles['design-grid'] + ' ' + blockStyles['design-grid']}>
           <div
@@ -168,18 +155,6 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
         body {
           padding: 0;
           margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
         }
         * {
           box-sizing: border-box;

@@ -1,7 +1,6 @@
 .block {
   width: calc(var(--block-size));
   height: calc(var(--block-size));
-
 }
 
 .borderless-button {
@@ -12,12 +11,11 @@
 
   width: calc(var(--block-size));
   height: calc(var(--block-size));
-
 }
 
 @media (max-width: 599px) {
   .design-grid .borderless-button {
     /* To prevent faint white lines in between images on mobile */
-    margin: -.5px;
+    margin: -0.5px;
   }
 }
