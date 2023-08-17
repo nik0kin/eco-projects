@@ -16,7 +16,7 @@
 }
 
 @media (max-width: 599px) {
-  .borderless-button {
+  .design-grid .borderless-button {
     /* To prevent faint white lines in between images on mobile */
     margin: -.5px;
   }

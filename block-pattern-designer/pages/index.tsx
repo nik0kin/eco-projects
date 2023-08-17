@@ -6,6 +6,7 @@ import { Block } from '../components/block';
 import { Palette } from '../components/palette';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
+import blockStyles from '../styles/Block.module.css';
 import { isDynamicStyle } from '../lib/eco-data/blocks';
 import {
   LENGTH_OF_CLAIM,
@@ -89,7 +90,7 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
           <button onClick={() => saveGridData({})}>reset</button>
         </div>
 
-        <div className={styles['design-grid']}>
+        <div className={styles['design-grid'] + ' ' + blockStyles['design-grid']}>
           <div
             className={styles['design-grid-inner']}
             style={{ gridTemplateColumns: `repeat(${width * LENGTH_OF_CLAIM}, max-content)` }}
