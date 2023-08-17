@@ -29,7 +29,7 @@ const getBlockImage = (
   let src: string = '';
   let rotation: number = 0;
 
-  if (type === BlockType.AsphaltConcrete && style) {
+  if (type === BlockType.AsphaltConcrete && typeof style === 'number') {
     if (asphaltBlockStyleConfigs[style]?.dynamic) {
       let { substyle, rotation: rot } = getBlockSubstyle(style, neighbors);
       // dotted line uses same sprites as middle line except for straight line
