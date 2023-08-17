@@ -9,6 +9,6 @@ module.exports = {
     `npx prettier --write ${filenames.join(' ')}`,
   ],
 
-  // Prettify only Markdown and JSON files
-  '**/*.(md|json)': (filenames) => `npx prettier --write ${filenames.join(' ')}`,
+  // Prettify only CSS, Markdown and JSON files
+  '**/*.(css|md|json)': (filenames) => `npx prettier --write ${filenames.join(' ')}`,
 };
