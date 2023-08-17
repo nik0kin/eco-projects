@@ -5,6 +5,7 @@ import React, { ChangeEvent, FC, Fragment, ReactNode, useMemo, useState } from '
 import { Block } from '../components/block';
 import { Options } from '../components/options';
 import { Palette } from '../components/palette';
+import { ShareLink } from '../components/share-link';
 import { SelectionManager, useSelection } from '../components/selection-manager';
 import styles from '../styles/Designer.module.css';
 import blockStyles from '../styles/Block.module.css';
@@ -42,7 +43,7 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
   const [designerGrid, setDesignerGrid] = useState<DesignerGrid>(preloadedGrid);
   const { type: selectedType, style: selectedStyle } = useSelection();
 
-  const saveGridViaWorker = useSaveGridViaWorker();
+  const [saveGridViaWorker, pageUrl] = useSaveGridViaWorker();
   const debounceSaveUrlData = useMemo(() => debounce(saveGridViaWorker, 1250), [saveGridViaWorker]);
 
   const saveGridData = (grid: DesignerGrid) => {
@@ -64,7 +65,7 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
       className={styles.container}
       style={{ '--block-size': getBlockSize(width, height) } as any}
     >
-      <main>
+      <main style={{ maxWidth: '100vw', padding: '.75rem' }}>
         <h1 className={styles.title}>{PAGE_TITLE}</h1>
 
         <p className={styles.description}>
@@ -119,6 +120,8 @@ const Designer: FC<{ preloadedGrid: DesignerGrid; preloadedGridSize: [number, nu
         </div>
 
         <Palette />
+
+        <ShareLink pageUrl={pageUrl} />
       </main>
 
       <footer>

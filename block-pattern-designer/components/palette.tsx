@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
-import React from 'react';
+import { Box, Card, CardBody, Heading, Stack, Wrap, WrapItem } from '@chakra-ui/react';
+import React, { FC, ReactNode } from 'react';
 import styles from '../styles/Designer.module.css';
 import { Block } from './block';
 import {
@@ -12,32 +12,43 @@ import { useSelection } from './selection-manager';
 export const Palette: FC = () => {
   const { setSelection } = useSelection();
   return (
-    /* TODO right side for desktop, below for mobile */
-    <div
-      className={styles['palette-grid']}
-      style={{ border: '2px solid black', padding: '.25rem' }}
-    >
-      <p>
-        <big style={{ margin: '1rem' }}>Palette</big>
-      </p>
-
-      <BlockSelectionBorder type={BlockType.Grass}>
-        <Block type={BlockType.Grass} onClick={() => setSelection([BlockType.Grass])} />
-      </BlockSelectionBorder>
-      <BlockSelectionBorder type={BlockType.StoneRoad}>
-        <Block type={BlockType.StoneRoad} onClick={() => setSelection([BlockType.StoneRoad])} />
-      </BlockSelectionBorder>
-      {asphaltBlockStylePaletteOrder.map((style) => (
-        <BlockSelectionBorder key={style} type={BlockType.AsphaltConcrete} style={style}>
-          <Block
-            type={BlockType.AsphaltConcrete}
-            style={style}
-            onClick={() => setSelection([BlockType.AsphaltConcrete, style])}
-            neighbors={{ north: style }}
-          />
-        </BlockSelectionBorder>
-      ))}
-    </div>
+    /* TODO right side for desktop, below for mobile? */
+    <Card variant="outline" mb={8}>
+      <CardBody>
+        <Box>
+          <Heading size="s" textTransform="uppercase" mb={2}>
+            Palette
+          </Heading>
+          <Wrap spacing={1}>
+            <WrapItem>
+              <BlockSelectionBorder type={BlockType.Grass}>
+                <Block type={BlockType.Grass} onClick={() => setSelection([BlockType.Grass])} />
+              </BlockSelectionBorder>
+            </WrapItem>
+            <WrapItem>
+              <BlockSelectionBorder type={BlockType.StoneRoad}>
+                <Block
+                  type={BlockType.StoneRoad}
+                  onClick={() => setSelection([BlockType.StoneRoad])}
+                />
+              </BlockSelectionBorder>
+            </WrapItem>
+            {asphaltBlockStylePaletteOrder.map((style) => (
+              <WrapItem key={style}>
+                <BlockSelectionBorder type={BlockType.AsphaltConcrete} style={style}>
+                  <Block
+                    type={BlockType.AsphaltConcrete}
+                    style={style}
+                    onClick={() => setSelection([BlockType.AsphaltConcrete, style])}
+                    neighbors={{ north: style }}
+                  />
+                </BlockSelectionBorder>
+              </WrapItem>
+            ))}
+          </Wrap>
+        </Box>
+      </CardBody>
+    </Card>
   );
 };
 
